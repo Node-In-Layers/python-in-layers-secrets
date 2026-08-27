@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from ..types import SecretsNamespace
 from . import features, globals, services
 from .features import ConfigSecretsFeatures
 from .services import ConfigSecretsServices
@@ -10,7 +11,6 @@ from .types import (
     NilSecretEntry,
     SecretFormat,
 )
-from ..types import SecretsNamespace
 
 name = SecretsNamespace.config.value
 

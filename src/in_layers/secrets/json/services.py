@@ -44,9 +44,7 @@ class JsonSecretsServices:
         if json5_path.exists():
             self.__file_path = json5_path
             return json5_path
-        raise FileNotFoundError(
-            f"Failed to read secrets file {basic} or {json5_path}."
-        )
+        raise FileNotFoundError(f"Failed to read secrets file {basic} or {json5_path}.")
 
     def __load(self) -> Mapping[str, Any]:
         if self.__data is not None:
@@ -55,11 +53,10 @@ class JsonSecretsServices:
         try:
             raw = path.read_text(encoding="utf-8")
         except OSError as error:
-            raise RuntimeError(f"Failed to read secrets file {path}: {error}") from error
-        if str(path).endswith("5"):
-            parsed = json5.loads(raw)
-        else:
-            parsed = json.loads(raw)
+            raise RuntimeError(
+                f"Failed to read secrets file {path}: {error}"
+            ) from error
+        parsed = json5.loads(raw) if str(path).endswith("5") else json.loads(raw)
         if parsed is None or not isinstance(parsed, dict) or isinstance(parsed, list):
             raise ValueError(f"Secrets file {path} must be a JSON object")
         self.__data = parsed

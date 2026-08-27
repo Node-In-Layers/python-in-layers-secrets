@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from ..types import SecretsNamespace
 from . import services
 from .services import SecretsCoreServices
 from .types import (
@@ -12,7 +13,6 @@ from .types import (
     StoreSecretProps,
     WithSecretsConfig,
 )
-from ..types import SecretsNamespace
 
 name = SecretsNamespace.core.value
 

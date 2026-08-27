@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-from enum import Enum
-from typing import Any, Mapping, Protocol, TypedDict
+from collections.abc import Mapping
+from enum import StrEnum
+from typing import Any, Protocol, TypedDict
 
 from in_layers.core.protocols import Config
 
-NIL_SECRET_ENTRY_KEY = "type"
-NIL_SECRET_ENTRY_TYPE = "nil-secret"
+NIL_SECRET_ENTRY_KEY = "type"  # noqa: S105
+NIL_SECRET_ENTRY_TYPE = "nil-secret"  # noqa: S105
 
 
-class SecretFormat(str, Enum):
+class SecretFormat(StrEnum):
     string = "string"
     json = "json"
 

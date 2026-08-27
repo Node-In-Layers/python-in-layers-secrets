@@ -9,7 +9,8 @@ from in_layers.core.protocols import CommonContext
 from ..context import to_services_context_for_secrets
 from ..core import services as core_services
 from ..types import SecretsNamespace
-from . import features, services as config_services
+from . import features
+from . import services as config_services
 
 
 class ConfigSecretsGlobals:

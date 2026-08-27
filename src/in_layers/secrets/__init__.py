@@ -26,14 +26,14 @@ from .json.types import JsonSecretsContext
 from .types import SecretsNamespace
 
 __all__ = [
+    "NIL_SECRET_ENTRY_KEY",
+    "NIL_SECRET_ENTRY_TYPE",
     "SECRETS_CONFIG_RESOLUTION",
     "ConfigSecretsFeatures",
     "ConfigSecretsServices",
     "GetSecretProps",
     "JsonSecretsContext",
     "JsonSecretsServices",
-    "NIL_SECRET_ENTRY_KEY",
-    "NIL_SECRET_ENTRY_TYPE",
     "NilSecretEntry",
     "SecretFormat",
     "SecretsConfig",

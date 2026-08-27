@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 
-class SecretsNamespace(str, Enum):
+class SecretsNamespace(StrEnum):
     core = "in_layers_secrets"
     json = "in_layers_secrets_json"
     config = "in_layers_secrets_config"

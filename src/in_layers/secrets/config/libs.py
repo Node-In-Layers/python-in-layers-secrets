@@ -7,7 +7,6 @@ from typing import Any
 from .types import (
     NIL_SECRET_ENTRY_KEY,
     NIL_SECRET_ENTRY_TYPE,
-    NilSecretEntry,
     NilSecretsToReplace,
 )
 
@@ -39,9 +38,7 @@ def _find_objects(
     )
 
 
-def find_nested_objects(
-    obj: Any, is_match: Callable[[object], bool]
-) -> list[str]:
+def find_nested_objects(obj: Any, is_match: Callable[[object], bool]) -> list[str]:
     return _find_objects(None, obj, is_match)
 
 
@@ -58,9 +55,7 @@ def is_nil_secret_entry(obj: object) -> bool:
 def _get_by_path(data: Any, path: str) -> Any:
     return reduce(
         lambda acc, key: (
-            acc[key]
-            if isinstance(acc, Mapping) and key in acc
-            else None
+            acc[key] if isinstance(acc, Mapping) and key in acc else None
         ),
         path.split("."),
         data,
