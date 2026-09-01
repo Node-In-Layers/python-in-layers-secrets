@@ -1,6 +1,6 @@
 [project]
 name = "in-layers-secrets"
-version = "0.1.0"
+version = "1.0.0"
 description = "The official secrets handling library for In Layers (Python). Part of the Node in Layers ecosystem."
 authors = [
     {name = "Mike Cornwell",email = "mike@mikecornwell.com"}
@@ -14,12 +14,12 @@ requires-python = ">=3.11,<4.0"
 dependencies = [
     "python-box (>=7,<9)",
     "json5 (>=0.9.0,<1.0.0)",
-    "in-layers-core (>=0.4.29,<0.5.0)"
+    "in-layers-core (>=1.0.0,<2.0.0)"
 ]
 
 [tool.poetry]
 name = "in-layers-secrets"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = []
 packages = [
@@ -47,7 +47,7 @@ dev = [
 python = ">=3.11,<4.0"
 python-box = ">=7,<9"
 json5 = ">=0.9.0,<1.0.0"
-in-layers-core = ">=0.4.29,<0.5.0"
+in-layers-core = ">=1.0.0,<2.0.0"
 
 [tool.isort]
 profile = "black"
