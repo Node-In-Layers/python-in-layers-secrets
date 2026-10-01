@@ -34,9 +34,7 @@ class DotenvSecretsServices:
             raise FileNotFoundError(f"Failed to read dotenv file {file_path}.")
 
         values = dotenv_values(file_path)
-        self.__data = {
-            key: value for key, value in values.items() if value is not None
-        }
+        self.__data = {key: value for key, value in values.items() if value is not None}
         return self.__data
 
     def get_stored_secret(self, props: GetSecretProps) -> str:
