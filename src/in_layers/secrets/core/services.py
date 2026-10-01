@@ -8,6 +8,8 @@ from box import Box
 
 from in_layers.core.protocols import CommonContext
 
+from ..dotenv import services as dotenv_services
+from ..env import services as env_services
 from ..json import services as json_services
 from ..types import SecretsNamespace
 from .types import (
@@ -66,7 +68,39 @@ def _resolve_raw_secrets_service(
         factory = getattr(secrets_config, "secret_service_factory", None)
     if factory is not None:
         return factory(common_globals)
-    return json_services.create(context)
+    return _DefaultSecretsService(
+        (
+            json_services.create(context),
+            env_services.create(context),
+            dotenv_services.create(context),
+        )
+    )
+
+
+class _DefaultSecretsService:
+    def __init__(self, backends: tuple[Any, ...]):
+        self.__backends = tuple(merge_json_defaults(backend) for backend in backends)
+
+    def __get_with_fallback(self, method_name: str, props: Any) -> Any:
+        def _resolve(index: int) -> Any:
+            backend = self.__backends[index]
+            try:
+                return getattr(backend, method_name)(props)
+            except Exception:
+                if index == len(self.__backends) - 1:
+                    raise
+                return _resolve(index + 1)
+
+        return _resolve(0)
+
+    def get_stored_secret(self, props: GetSecretProps) -> str:
+        return self.__get_with_fallback("get_stored_secret", props)
+
+    def get_stored_json_secret(self, props: GetSecretProps) -> Mapping[str, Any]:
+        return self.__get_with_fallback("get_stored_json_secret", props)
+
+    def store_secret(self, props: StoreSecretProps) -> None:
+        return self.__backends[0].store_secret(props)
 
 
 class SecretsCoreServices:

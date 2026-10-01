@@ -39,12 +39,12 @@ def get_config():
                 # your domains
             ],
         ),
-        # Optional: see SecretsConfig — omit or use {} to use the default json file backend.
+        # Optional: omit or use {} to use the built-in default backend chain.
         in_layers_secrets=Box({}),
     )
 ```
 
-To use the **default json file** backend instead, omit `secret_service_factory` (or pass `in_layers_secrets={}`).
+To use the built-in defaults, omit `secret_service_factory` (or pass `in_layers_secrets={}`). Secrets are looked up in the JSON/JSON5 backend first, then `os.environ`, then the `.env` backend.
 
 ## Main Capabilities
 
@@ -57,14 +57,18 @@ To use the **default json file** backend instead, omit `secret_service_factory` 
 
 Provides the basic capabilities of storing and retrieving secrets.
 
-Core wires a single `SecretsService`-compatible backend from config and exposes the full string + JSON API (JSON is synthesized from strings when the backend omits JSON methods).
+Core exposes the full string + JSON API (JSON is synthesized from strings when a backend omits JSON methods). When no custom factory is configured, the built-in read chain is used.
 
 #### SecretsConfig
 
-`SecretsConfig` (under `in_layers_secrets` in system config) resolves a backend in one of two ways only:
+`SecretsConfig` (under `in_layers_secrets` in system config) resolves secrets in this order:
 
 1. **`secret_service_factory`** — `(ctx: CommonContext) -> SecretsService`. Use during globals when full services context is not available yet (for example a future AWS secrets factory).
-2. **Default** — if `secret_service_factory` is omitted, the **json file** backend (`secrets.{ENVIRONMENT}.json`) is used.
+2. **Default JSON backend** — tries `secrets.{ENVIRONMENT}.json` and `.json5`.
+3. **Default environment backend** — if JSON does not contain the key, tries the exact key in `os.environ`.
+4. **Default dotenv backend** — if neither JSON nor `os.environ` contains the key, tries the exact key in `.env`.
+
+The fallback happens per lookup. A configured `secret_service_factory` replaces this built-in chain entirely. The `.env` path defaults to `.env` in the system working directory and can be changed with `dotenv_file_path`.
 
 The ordered step ids are exported as **`SECRETS_CONFIG_RESOLUTION`** from this package (for docs and tooling).
 
@@ -295,3 +299,19 @@ These files are automatically found at the base of the system directory (working
 `secrets.{ENVIRONMENT}.json`
 
 `secrets.{ENVIRONMENT}.json5`
+
+### SecretsNamespace.env (`in_layers_secrets_env`)
+
+The environment backend reads an exact `GetSecretProps["key"]` from `os.environ`. It does not interpret dots as paths and does not modify the environment.
+
+### SecretsNamespace.dotenv (`in_layers_secrets_dotenv`)
+
+The dotenv backend parses `.env` without loading it into `os.environ`:
+
+```python
+in_layers_secrets=Box(
+    dotenv_file_path="config/local.env",
+)
+```
+
+Both local backends are read-only. Missing keys raise an error, and `store_secret`/`store_secret_json` are not implemented. Keep `.env` files out of source control.

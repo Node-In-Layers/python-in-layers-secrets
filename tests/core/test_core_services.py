@@ -62,3 +62,32 @@ def test_default_json_backend(tmp_path: Path):
     )
     services = create(context)
     assert services.get_stored_secret({"key": "api_key"}) == "secret-1"
+
+
+def test_default_environment_backend_after_json_misses(monkeypatch):
+    monkeypatch.setenv("NIL_TEST_SECRET", "environment-secret")
+    context = Box(
+        config=Box({SecretsNamespace.core.value: Box({})}),
+        root_logger={},
+        constants=Box(working_directory="/tmp", environment="test"),
+    )
+    services = create(context)
+
+    assert services.get_stored_secret({"key": "NIL_TEST_SECRET"}) == (
+        "environment-secret"
+    )
+
+
+def test_default_dotenv_backend_after_json_and_environment_misses(tmp_path: Path):
+    (tmp_path / ".env").write_text(
+        "NIL_TEST_SECRET=dotenv-secret\n",
+        encoding="utf-8",
+    )
+    context = Box(
+        config=Box({SecretsNamespace.core.value: Box({})}),
+        root_logger={},
+        constants=Box(working_directory=str(tmp_path), environment="test"),
+    )
+    services = create(context)
+
+    assert services.get_stored_secret({"key": "NIL_TEST_SECRET"}) == "dotenv-secret"

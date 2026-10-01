@@ -8,6 +8,8 @@ def test_namespace_values():
     assert SecretsNamespace.core.value == "in_layers_secrets"
     assert SecretsNamespace.json.value == "in_layers_secrets_json"
     assert SecretsNamespace.config.value == "in_layers_secrets_config"
+    assert SecretsNamespace.env.value == "in_layers_secrets_env"
+    assert SecretsNamespace.dotenv.value == "in_layers_secrets_dotenv"
 
 
 def test_secret_format_values():
@@ -19,6 +21,8 @@ def test_resolution_steps():
     assert SECRETS_CONFIG_RESOLUTION == (
         "secret_service_factory",
         "json_backend_default",
+        "env_backend_default",
+        "dotenv_backend_default",
     )
 
 

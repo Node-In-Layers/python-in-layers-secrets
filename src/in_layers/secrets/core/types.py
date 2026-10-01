@@ -44,6 +44,8 @@ class SecretsService(Protocol):
 SECRETS_CONFIG_RESOLUTION = (
     "secret_service_factory",
     "json_backend_default",
+    "env_backend_default",
+    "dotenv_backend_default",
 )
 
 
@@ -56,6 +58,7 @@ class SecretsConfig(TypedDict, total=False):
     """
 
     secret_service_factory: Callable[[CommonContext], Any]
+    dotenv_file_path: str
 
 
 class WithSecretsConfig(Config, Protocol):

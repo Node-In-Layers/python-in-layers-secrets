@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from . import config, core, json
+from . import dotenv, env
 from .config.features import ConfigSecretsFeatures
 from .config.services import ConfigSecretsServices
 from .config.types import (
@@ -22,6 +23,8 @@ from .core.types import (
     WithSecretsConfig,
 )
 from .json.services import JsonSecretsServices
+from .dotenv.services import DotenvSecretsServices
+from .env.services import EnvSecretsServices
 from .json.types import JsonSecretsContext
 from .types import SecretsNamespace
 
@@ -31,6 +34,8 @@ __all__ = [
     "SECRETS_CONFIG_RESOLUTION",
     "ConfigSecretsFeatures",
     "ConfigSecretsServices",
+    "DotenvSecretsServices",
+    "EnvSecretsServices",
     "GetSecretProps",
     "JsonSecretsContext",
     "JsonSecretsServices",
@@ -46,6 +51,8 @@ __all__ = [
     "WithSecretsConfig",
     "config",
     "core",
+    "dotenv",
+    "env",
     "json",
     "to_services_context_for_secrets",
 ]
